@@ -3,19 +3,23 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     ofSetLogLevel(OF_LOG_VERBOSE);
-    
-	ofBackground(255,255,0);
+    ofSetFrameRate(30);
+	ofBackground(0,0,0);
     
     //declare a new renderer with 1 layer, 10000 tiles per layer, default layer of 0, tile size of 32
 	droneRenderer = new ofxSpriteSheetRenderer(1, 10000, 0, 128);
     // load the spriteSheetExample.png texture of size 256x256 into the sprite sheet. set it's scale mode to nearest since it's pixel art
 	droneRenderer->loadTexture("DronesSpritesheet.png", 1024, GL_NEAREST);
     spriteAdded = false;
+    timeCode = 0.0;
 
+    
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
+    timeCode += 0.01;
+
 	droneRenderer->clear(); // clear the sheet
 	droneRenderer->update(ofGetElapsedTimeMillis()); //update the time in the renderer, this is necessary for animations to advance
     
@@ -24,14 +28,15 @@ void testApp::update(){
     	{
     		for(int i=sprites.size()-1;i>=0;i--) //go through them
     		{
-    			sprites[i]->pos.y+=sprites[i]->speed; //add their speed to their y
+    			sprites[i]->pos.y+=(sprites[i]->speed)/2; //add their speed to their y
+    			sprites[i]->pos.y += sin(timeCode*20);
     			sprites[i]->pos.x-=sprites[i]->speed; //add their speed to their y
     
     			if(sprites[i]->pos.y > ofGetHeight()+16)
                     //if they are past the bottom of the screen
     			{
-    				sprites[i]->pos.x = ofRandom(0,800);
-     				sprites[i]->pos.y = 0;
+    				sprites[i]->pos.x = ofRandom(100,1800);
+     				sprites[i]->pos.y = -50;
    			} else {
                         droneRenderer->addCenteredTile(&sprites[i]->animation, sprites[i]->pos.x, sprites[i]->pos.y);
                     // add them to the sprite renderer (add their animation at their position, there are a lot more options for what could happen here, scale, tint, rotation, etc, but the animation, x and y are the only variables that are required)
@@ -45,7 +50,7 @@ void testApp::update(){
     
     	if(spriteAdded == false){
     		basicSprite * newSprite = new basicSprite(); // create a new sprite
-    		newSprite->pos.set(ofRandom(30,700),100); //set its position
+    		newSprite->pos.set(ofRandom(100,1800),200); //set its position
     		newSprite->speed=ofRandom(1,5); //set its speed
             newSprite->sheetRow = 0;
     		newSprite->animation = flyingAnimation; //set its animation to the walk animation we declared

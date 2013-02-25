@@ -49,5 +49,6 @@ class testApp : public ofBaseApp{
         ofImage rpiLogo;
     
         int angle;
+        float timeCode;
 
 };
