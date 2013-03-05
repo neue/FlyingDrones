@@ -16,7 +16,7 @@ static animation_t flyingAnimation =
 	1	/* .frameskip		(int) - the incrementation of each frame. 1 should be set by default. If you wanted the animation to play backwards you could set this to -1, etc.	*/
 };
 
-static animation_t cloudAnimation =
+static animation_t staticAnimation =
 {	7,	/* .index			(int) - this is the index of the first animation frame. indicies start at 0 and go left to right, top to bottom by tileWidth on the spriteSheet		*/
 	0,	/* .frame			(int) - this is the current frame. It's an internal variable and should always be set to 0 at init													*/
 	1,	/* .totalframes		(int) - the animation length in frames																												*/
@@ -48,6 +48,14 @@ struct cloudSprite {
     int offset;
 };
 
+//
+// DIRT
+//
+struct dirtSprite {
+	animation_t animation;
+	ofPoint pos;
+};
+
 
 class testApp : public ofBaseApp{
 	public:
@@ -65,15 +73,20 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
+        void addDirt();
+    
         ofxSpriteSheetRenderer * droneRenderer;
         vector<droneSprite *> sprites; // our vector of sprites
-        vector<cloudSprite *> cloudSprites; // our vector of sprites
+        bool droneAdded;
 
-        bool spriteAdded;
+        vector<cloudSprite *> cloudSprites;
         bool cloudsAdded;
-        ofImage rpiLogo;
-        int windSpeed;
-        int angle;
+        float windSpeed;
+
+        vector<dirtSprite *> dirtSprites;
+        int dirtPenX;
+        int dirtPenY;
+    
         float timeCode;
 
 };
